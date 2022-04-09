@@ -172,6 +172,7 @@ export default {
     }
   },
   methods: {
+
     async getCards() {
       try {
         let response = await axios.get("/api/cards");
@@ -293,10 +294,19 @@ export default {
       this.showRoleBox = true;
       this.editing = true;
     },
-    saveCard() {
-      let role = {adjective: this.adjective, role: this.role, noun: this.noun, id: this.currentId };
+    async saveCard() {
+      let card = {adjective: this.adjective, role: this.role, noun: this.noun};
       this.currentId++;
-      this.savedCards.push(role);
+      this.savedCards.push(card);
+      try {
+        await axios.post('/api/cards', {
+          adjective: this.adjective, 
+          role: this.role, 
+          noun: this.noun,
+        })
+      } catch (error) {
+        console.log(error);
+      }
     },
     deleteCard() {
     let index = this.roleIndex;
