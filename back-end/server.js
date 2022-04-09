@@ -49,6 +49,16 @@ const cardSchema = new mongoose.Schema({
     }
   });
 
+  app.get('/cards', async (req, res) => {
+    try {
+      let cards = await Card.find();
+      res.send(cards);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
+    }
+  });
+
   app.listen(3000, () => console.log('Server listening on port 3000!'));
 
 
