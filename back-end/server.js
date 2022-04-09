@@ -34,7 +34,7 @@ const cardSchema = new mongoose.Schema({
   const Card = mongoose.model('Item', cardSchema);
 
   // Create a new item in the museum: takes a title and a path to an image.
-  app.post('/cards', async (req, res) => {
+  app.post('/api/cards', async (req, res) => {
     const card = new Card({
       adjective: req.body.adjective,
       role: req.body.role,
@@ -49,10 +49,22 @@ const cardSchema = new mongoose.Schema({
     }
   });
 
-  app.get('/cards', async (req, res) => {
+  app.get('/api/cards', async (req, res) => {
     try {
       let cards = await Card.find();
       res.send(cards);
+    } catch (error) {
+      console.log(error);
+      res.sendStatus(500);
+    }
+  });
+
+  app.delete('/api/cards/:id', async (req, res) => {
+    try {
+      await Card.deleteOne({
+        _id: req.params.id
+      });
+      res.sendStatus(200);
     } catch (error) {
       console.log(error);
       res.sendStatus(500);
