@@ -73,6 +73,7 @@
 <script>
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
+import axios from 'axios'
 
 export default {
   
@@ -151,6 +152,7 @@ export default {
     this.noun = this.randomNoun();
     this.adjective = this.randomAdjective();
     this.role = this.randomRole();
+    this.getCards();
   },
     watch: {
     selectedRole(newRole) {
@@ -170,6 +172,15 @@ export default {
     }
   },
   methods: {
+    async getCards() {
+      try {
+        let response = await axios.get("/api/cards");
+        this.savedCards = response.data;
+        return true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     noArticle(noun) {
       let plural = this.wordAt(noun, noun.length - 1) === 's';
