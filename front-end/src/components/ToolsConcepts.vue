@@ -176,6 +176,9 @@ export default {
         this.roleIndex = this.savedCards.length - 1;
       } 
     },
+    savedCards() {
+    this.postEdits();
+  },
   },
   methods: {
     async getCards() {
