@@ -303,20 +303,23 @@ export default {
           adjective: this.adjective, 
           role: this.role, 
           noun: this.noun,
-        })
+        });
+        this.getCards();
       } catch (error) {
         console.log(error);
       }
     },
-    deleteCard() {
+    async deleteCard() {
     let index = this.roleIndex;
-    if (index > -1) {
-      console.log(this.savedCards.splice(index, 1));
-      if (this.roleIndex > 0) {
+      try {
+        await axios.delete("/api/cards/" + this.savedCards[index]._id);
         this.roleIndex--;
-        }
-        }
-      },  
+        this.getCards();
+        return true;
+      } catch (error) {
+      console.log(error);
+      }
+    },  
     closeSavedEdit() {
       this.showSavedAdjBox = false;
       this.showSavedNounBox = false;
