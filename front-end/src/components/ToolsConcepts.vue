@@ -130,6 +130,12 @@ export default {
         } 
         return article;
     },
+    savedAdjective() {
+      return this.savedCards[this.roleIndex].adjective;
+    },
+    savedRole() {
+      return this.savedCards[this.roleIndex].role;
+    },
     savedNoun() {
       return this.savedCards[this.roleIndex].noun;
     },
@@ -169,10 +175,9 @@ export default {
       if (newIndex > this.savedCards.length - 1) {
         this.roleIndex = this.savedCards.length - 1;
       } 
-    }
+    },
   },
   methods: {
-
     async getCards() {
       try {
         let response = await axios.get("/api/cards");
@@ -275,12 +280,15 @@ export default {
     },
     toggleSavedAdj() {
       this.showSavedAdjBox = !this.showSavedAdjBox;
+      this.postEdits();
     },
     toggleSavedNoun() {
       this.showSavedNounBox = !this.showSavedNounBox;
+      this.postEdits();
     },
     toggleSavedRole() {
       this.showSavedRoleBox = !this.showSavedRoleBox;
+      this.postEdits()
     },
     closeCard() {
       this.showAdjectiveBox = false;
@@ -325,6 +333,7 @@ export default {
       this.showSavedNounBox = false;
       this.showSavedRoleBox = false;
       this.editingSaved = false;
+      this.postEdits();
     },
     editSaved() {
       this.showSavedAdjBox = true;
@@ -339,6 +348,17 @@ export default {
     previousRole() {
       this.roleIndex--;
       this.closeSavedEdit();
+    },
+    async postEdits() {
+      try {
+        await axios.put('/api/cards/' + this.savedCards[this.roleIndex]._id, {
+          adjective: this.savedAdjective,
+          role: this.savedRole,
+          noun: this.savedNoun,
+        })
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
 }
