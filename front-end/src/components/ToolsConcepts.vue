@@ -27,14 +27,15 @@
                 <span @click="closeCard" v-if="editing"><font-awesome-icon icon="fa-solid fa-xmark" class="card-option"/></span>
                 <span @click="saveCard"><font-awesome-icon icon="fa-regular fa-floppy-disk" class="card-option"/></span>
               </div>
+              <!-- <span class="card-text card-name variable-word">Hey</span> -->
               <div id="generated-role" class="card-text">
                   <span v-if="!showAdjectiveBox" id="adjective" class="card-text variable-word" v-on:click="toggleAdjective">{{adjective}}</span> 
-                  <input maxlength="30" v-if="showAdjectiveBox" v-model="adjective" v-on:keyup.enter="toggleAdjective" class="card-text small-input"/>
+                  <input id="adjective-edit-box" maxlength="30" v-if="showAdjectiveBox" v-model="adjective" v-on:keyup.enter="toggleAdjective" class="card-text small-input" placeholder="(adjective)"/>
                   <span v-if="!showRoleBox" id="role" class="card-text variable-word" v-on:click="toggleRole"> {{role}}</span> 
                   <input maxlength="20" v-if="showRoleBox" v-model="role" v-on:keyup.enter="toggleRole" class="card-text small-input"/>
                   with {{article}} 
                   <span v-if="!showNounBox" id="noun" class="card-text variable-word" @click="toggleNoun">{{noun}}</span>
-                  <input maxlength="30" v-if="showNounBox" v-model="noun" v-on:keyup.enter="toggleNoun" class="card-text small-input"/>
+                  <input maxlength="30" v-if="showNounBox" v-model="noun" v-on:keyup.enter="toggleNoun" class="card-text small-input" placeholder="(noun)"/>
               </div>
             </div>
             </div>
@@ -80,17 +81,17 @@ export default {
   name: 'ToolsConcepts',
   data() {
       return {
-          adjective: 'temporary',
-          noun: 'test',
+          adjective: null,
+          noun: null,
           selectedRole: 'random',
-          role: 'con',
+          role: null,
           nouns: this.$root.$data.nouns,
           adjectives: this.$root.$data.adjectives,
           roles: ['burglar', 'con', 'muscle', 'hacker'],
           colors: ['red','orange','yellow','green','blue','purple','pink','grey','black','brown'],
-          showAdjectiveBox: false,
-          showNounBox: false,
-          showRoleBox: false,
+          showAdjectiveBox: true,
+          showNounBox: true,
+          showRoleBox: true,
           editing: false,
           showSavedAdjBox: false,
           showSavedNounBox: false,
@@ -104,7 +105,7 @@ export default {
   computed: {
     article() {
     let article = "a";
-     if (this.isVowel(this.noun.charAt(0))) {
+     if ( this.isVowel(this.wordAt(this.noun, 0))) {
             article = "an";   
         }
         if (this.noArticle(this.noun)) {
@@ -122,7 +123,7 @@ export default {
     },
     savedArticle() {
     let article = "a";
-     if (this.isVowel(this.savedNoun.charAt(0))) {
+     if (this.isVowel(this.wordAt(this.savedNoun, 0))) {
             article = "an";   
         }
         if (this.noArticle(this.savedNoun)) {
@@ -155,8 +156,8 @@ export default {
     }
   },
   created() {
-    this.noun = this.randomNoun();
-    this.adjective = this.randomAdjective();
+    // this.noun = this.randomNoun();
+    // this.adjective = this.randomAdjective();
     this.role = this.randomRole();
     this.getCards();
   },
@@ -190,15 +191,21 @@ export default {
         console.log(error);
       }
     },
-
     noArticle(noun) {
-      let plural = this.wordAt(noun, noun.length - 1) === 's';
-      let no = this.wordAt(noun, 0) === 'n' && this.wordAt(noun, 1) === 'o' && this.wordAt(noun, 2) === ' ';
-      let some = this.wordAt(noun, 0) === 's' && this.wordAt(noun, 1) === 'o' && this.wordAt(noun, 2) === 'm' && this.wordAt(noun, 3) === 'e';
-      return plural || no || some;
+      if (noun !== null) {
+        let plural = this.wordAt(noun, noun.length - 1) === 's';
+        let no = this.wordAt(noun, 0) === 'n' && this.wordAt(noun, 1) === 'o' && this.wordAt(noun, 2) === ' ';
+        let some = this.wordAt(noun, 0) === 's' && this.wordAt(noun, 1) === 'o' && this.wordAt(noun, 2) === 'm' && this.wordAt(noun, 3) === 'e';
+        return plural || no || some;
+      } else {
+        return false;
+      }
     },
 
     wordAt(word, index) {
+      if (word === null) {
+        return false;
+      }
       if (word.length > index)
         return word.charAt(index);
       else
@@ -294,6 +301,7 @@ export default {
       this.postEdits()
     },
     closeCard() {
+      this.checkVarWords();
       this.showAdjectiveBox = false;
       this.showNounBox = false;
       this.showRoleBox = false;
@@ -304,6 +312,18 @@ export default {
       this.showNounBox = true;
       this.showRoleBox = true;
       this.editing = true;
+      document.getElementById("adjective-edit-box").focus();
+    },
+    checkVarWords() {
+      if (this.adjective === null || this.adjective === "") {
+        this.adjective = "(adjective)";
+      }
+      if (this.noun === null || this.noun === "") {
+        this.noun = "(noun)";
+      }
+      if (this.role === null || this.role === "") {
+        this.role = "(role)";
+      }
     },
     async saveCard() {
       let card = {adjective: this.adjective, role: this.role, noun: this.noun};
@@ -336,7 +356,19 @@ export default {
       this.showSavedNounBox = false;
       this.showSavedRoleBox = false;
       this.editingSaved = false;
+      this.checkSavedVars();
       this.postEdits();
+    },
+    checkSavedVars() {
+      if (this.savedAdjective === null || this.savedAdjective === "") {
+        this.savedAdjective = "(adjective)";
+      }
+      if (this.savedNoun === null || this.savedNoun === "") {
+        this.savedNoun = "(noun)";
+      }
+      if (this.savedRole === null || this.savedRole === "") {
+        this.savedRole = "(role)";
+      }
     },
     editSaved() {
       this.showSavedAdjBox = true;
@@ -472,5 +504,8 @@ export default {
   }
   .ruler {
     border-top: 1px solid black;
+  }
+  .card-name {
+    font-weight: bold;
   }
 </style>
