@@ -32,7 +32,7 @@
                   <span v-if="!showAdjectiveBox" id="adjective" class="card-text variable-word" v-on:click="toggleAdjective">{{adjective}}</span> 
                   <input id="adjective-edit-box" maxlength="30" v-if="showAdjectiveBox" v-model="adjective" v-on:keyup.enter="toggleAdjective" class="card-text small-input" placeholder="(adjective)"/>
                   <span v-if="!showRoleBox" id="role" class="card-text variable-word" v-on:click="toggleRole"> {{role}}</span> 
-                  <input maxlength="20" v-if="showRoleBox" v-model="role" v-on:keyup.enter="toggleRole" class="card-text small-input"/>
+                  <input maxlength="20" v-if="showRoleBox" v-model="role" v-on:keyup.enter="toggleRole" class="card-text small-input" placeholder="(role)"/>
                   with {{article}} 
                   <span v-if="!showNounBox" id="noun" class="card-text variable-word" @click="toggleNoun">{{noun}}</span>
                   <input maxlength="30" v-if="showNounBox" v-model="noun" v-on:keyup.enter="toggleNoun" class="card-text small-input" placeholder="(noun)"/>
@@ -158,7 +158,7 @@ export default {
   created() {
     // this.noun = this.randomNoun();
     // this.adjective = this.randomAdjective();
-    this.role = this.randomRole();
+    // this.role = this.randomRole();
     this.getCards();
   },
     watch: {
@@ -290,14 +290,23 @@ export default {
     },
     toggleSavedAdj() {
       this.showSavedAdjBox = !this.showSavedAdjBox;
+      if (!this.showSavedRoleBox && !this.showSavedNounBox) {
+        this.editingSaved = !this.editing;
+      }
       this.postEdits();
     },
     toggleSavedNoun() {
       this.showSavedNounBox = !this.showSavedNounBox;
+      if (!this.showSavedRoleBox && !this.showSavedAdjBox) {
+        this.editingSaved = !this.editing;
+      }
       this.postEdits();
     },
     toggleSavedRole() {
       this.showSavedRoleBox = !this.showSavedRoleBox;
+      if (!this.showSavedNounBox && !this.showSavedAdjBox) {
+        this.editingSaved = !this.editing;
+      }
       this.postEdits()
     },
     closeCard() {
