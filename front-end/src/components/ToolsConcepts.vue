@@ -291,21 +291,21 @@ export default {
     toggleSavedAdj() {
       this.showSavedAdjBox = !this.showSavedAdjBox;
       if (!this.showSavedRoleBox && !this.showSavedNounBox) {
-        this.editingSaved = !this.editing;
+        this.editingSaved = !this.editingSaved;
       }
       this.postEdits();
     },
     toggleSavedNoun() {
       this.showSavedNounBox = !this.showSavedNounBox;
       if (!this.showSavedRoleBox && !this.showSavedAdjBox) {
-        this.editingSaved = !this.editing;
+        this.editingSaved = !this.editingSaved;
       }
       this.postEdits();
     },
     toggleSavedRole() {
       this.showSavedRoleBox = !this.showSavedRoleBox;
       if (!this.showSavedNounBox && !this.showSavedAdjBox) {
-        this.editingSaved = !this.editing;
+        this.editingSaved = !this.editingSaved;
       }
       this.postEdits()
     },
