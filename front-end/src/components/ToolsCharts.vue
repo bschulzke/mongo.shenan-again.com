@@ -20,7 +20,7 @@
           </p>
           <p>See the <router-link to="/rulebook">rulebook</router-link> for details on challenges rolls</p>
         </div>
-    </div>
+      </div>
         <div class="grid-view">
           <img class="grid-image" src="/images/table-6.png"/>
           <img class="grid-image" src="/images/table-5-6.png"/>

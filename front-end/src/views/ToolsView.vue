@@ -4,10 +4,12 @@
       <a @click="openCharts" :class="[{active : showCharts}]">Charts</a>
       <a @click="openCalculator" :class="[{active : showCalculator}]">Probability</a>
       <a @click="openConcepts" :class="[{active : showConcepts}]">Characters</a>
+      <a @click="openMaps" :class="[{active : showMaps}]">Maps</a>
     </div>
     <ToolsCalc  v-show="showCalculator"></ToolsCalc>
     <ToolsCharts v-show="showCharts"></ToolsCharts>
     <ToolsConcepts v-show="showConcepts"></ToolsConcepts>
+    <ToolsMaps v-show="showMaps"></ToolsMaps>
   </div>
 </template>
 
@@ -16,6 +18,7 @@
 import ToolsCalc from '@/components/ToolsCalc.vue'
 import ToolsCharts from '@/components/ToolsCharts.vue'
 import ToolsConcepts from '@/components/ToolsConcepts.vue'
+import ToolsMaps from '@/components/ToolsMaps.vue'
 
 export default {
   name: 'ToolsView',
@@ -28,6 +31,7 @@ export default {
       ToolsCalc,
       ToolsCharts,
       ToolsConcepts,
+      ToolsMaps,
     },
     computed: {
       showCalculator() {
@@ -38,6 +42,9 @@ export default {
       },      
       showConcepts() {
         return this.activeTool === 'concepts';
+      },
+      showMaps() {
+        return this.activeTool === 'maps';
       }
     },
     methods: {
@@ -49,6 +56,9 @@ export default {
       },
       openConcepts() {
         this.activeTool = 'concepts';
+      },
+      openMaps() {
+        this.activeTool = 'maps';
       }
     }
 }
@@ -83,7 +93,7 @@ export default {
   }
 
   a {
-    padding: 0 1.5rem;
+    padding: 0 1rem;
   }
 
   a:hover {
@@ -95,9 +105,9 @@ export default {
     cursor: pointer;
   }
 
-  @media only screen and (max-width: 900px) {
-      .concepts {
-      /* padding-top: 7rem; */
-    }
+  @media only screen and (min-width: 900px) {
+      a {
+        padding: 0 2rem;
+      }
   }
 </style>
