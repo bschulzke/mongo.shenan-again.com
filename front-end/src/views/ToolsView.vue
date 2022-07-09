@@ -4,7 +4,7 @@
       <a @click="openCharts" :class="[{active : showCharts}]">Charts</a>
       <a @click="openCalculator" :class="[{active : showCalculator}]">Probability</a>
       <a @click="openConcepts" :class="[{active : showConcepts}]">Characters</a>
-      <a @click="openMaps" :class="[{active : showMaps}]">Maps</a>
+      <a @click="openMaps" :class="[{active : showMaps}, 'maps-button']">Maps</a>
     </div>
     <ToolsCalc  v-show="showCalculator"></ToolsCalc>
     <ToolsCharts v-show="showCharts"></ToolsCharts>
@@ -109,5 +109,11 @@ export default {
       a {
         padding: 0 2rem;
       }
+  }
+
+  @media only screen and (max-width: 1280px) {
+    .maps-button {
+      display: none;
+    }
   }
 </style>

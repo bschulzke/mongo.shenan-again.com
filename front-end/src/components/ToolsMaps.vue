@@ -7,13 +7,8 @@
         <option value="yacht">Yacht-zee</option>
       </select>
     </div>
-    <div v-show="showBrook">
-      <img class="circus-image" src="/images/brooks-edge.png" alt="brook's edge"/>
-    </div>
-    <div v-show="showYacht">
-      <img class="yacht-image" src="/images/yacht1.jpg" alt="yacht image"/>
-      <img class="yacht-image" v-show="showYacht" src="/images/yacht2.jpg" alt="yacht image"/>
-      <img class="yacht-image" v-show="showYacht" src="/images/yacht3.jpg" alt="yacht image"/>
+    <div class="images">
+      <img v-for="image in selectedMapImages" :src="image.path" :class="image.class" alt="maps" v-bind:key="image"/>
     </div>
   </div>
 </template>
@@ -27,14 +22,41 @@ export default {
     }
   },
   computed: {
-    showBrook() {
-      return this.selectedMap === 'brook';
-    },
-    showClown() {
-      return this.selectedMap === 'clown';
-    },
-    showYacht() {
-      return this.selectedMap === 'yacht';
+    selectedMapImages() {
+      if (this.selectedMap === 'brook') {
+        return [
+          {
+            path: '/images/brooks-edge.png',
+            class: 'circus-image'
+          }
+        ]
+      }
+      else if (this.selectedMap === 'yacht') {
+        return [
+          {
+            path: '/images/yacht1.jpg',
+            class: 'yacht-image'
+          },
+          {
+            path: '/images/yacht2.jpg',
+            class: 'yacht-image'
+          },
+          {
+            path: '/images/yacht3.jpg',
+            class: 'yacht-image'
+          }
+        ]
+      } else if (this.selectedMap === 'clown') {
+        return [
+          {
+            path: '/images/big-top.png',
+            class: 'big-top'
+          }
+        ]
+      }
+      else {
+        return []
+      }
     }
   }
 }
@@ -58,6 +80,10 @@ export default {
 
 .circus-image {
   width: 800px;
+}
+
+.big-top {
+  width: 700px;
 }
 
 </style>
